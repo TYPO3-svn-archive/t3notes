@@ -1,0 +1,30 @@
+
+  # cat=basic//10; type=text; label= Authentication URL: URL for the authentication request
+authenticateURL = 
+
+  # cat=basic//10; type=text; label= Anonymous username: Username to use for the anonymous authentification
+anonymousUsername = 
+
+  # cat=basic//10; type=text; label= Anonymous password: Password to use for the anonymous authentification
+anonymousPassword = 
+
+  # cat=basic//10; type=text; label= Anonymous cookie valid time: Anonymous cookie will be saved in DB and will be valid for count of seconds you define here. 900 = 15 minutes
+expireAfterSeconds = 900
+
+  # cat=basic//10; type=int; label= Usergroup ID for new fe_user items: If the user is authenticated by Lotus Notes server and doesn't exist in DB it will be created with this group
+defaultUserGroup = 
+
+  # cat=basic//10; type=int; label= PID for new fe_user items: If the user is authenticated by Lotus Notes server and doesn't exist in DB it will be created with this PID
+defaultUserPID = 
+
+  # cat=basic//10; type=text; label= NOT Needed anymore! SERVER Var entry for NTLM Login: Variable where the NTLM username can be found for the un-personal login
+NTLMLoginVar = REMOTE_USER
+
+  # cat=basic//10; type=int; label= Timout for CURL requests: Set timeout for curl requests in seconds - default is 4 seconds always
+curlTimeout = 4
+
+ # cat=basic//10; type=int; label= Seconds to wait until auto-login: Set the number of seconds to wait until doing a auto-login request with the login information of the fe_user (saved in session) 0 means disable auto-login feature
+autoLoginWaitSeconds = 1200
+
+  # cat=basic//10; type=text; label= Cookie domain: Domain which will be set for the user cookie, if empty cookie domain from notes will be used
+cookieDomain = 

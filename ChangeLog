@@ -1,0 +1,94 @@
+2010-08-19 Sonja Scholz  <ss@cabag.ch>
+	* Version 0.2.1
+	* cookie domain can be set in the extension manager now - if empty cookie domain from lotus notes will be used
+
+2010-08-18 Sonja Scholz  <ss@cabag.ch>
+	* Version 0.2.0
+	* fixed bug in mcrypt functionaltity
+
+2010-08-17 Sonja Scholz  <ss@cabag.ch>
+	* Version 0.1.9
+	* changed NTLM login functionaltity in tx_t3notes_sv1 - read the username from a URL param instead of reading from a PHP session
+
+2010-07-12 Sonja Scholz  <ss@cabag.ch>
+	* Version 0.1.8
+	* fixed bug in auth class - don't write any log to devLog if the localconf setting issn't enabled
+
+2010-06-25 Sonja Scholz  <ss@cabag.ch>
+	* Version 0.1.7
+	* added new option autoLoginWaitSeconds to ext_conf_template to configure the auto-login feature
+	* added userFunc checkT3NotesAutoLogin() to auth class to call from page.5 Typoscript before rendering the FE content
+
+2010-06-08 Sonja Scholz  <ss@cabag.ch>
+	* Version 0.1.6
+	* add new function processCurlAdditionalPostParams to cabag_phpproxy hook
+
+2010-06-07 Sonja Scholz  <ss@cabag.ch>
+	* Version 0.1.5
+	* added new extension manager option curlTimeout
+
+2010-06-03 Sonja Scholz  <ss@cabag.ch>
+	* Version 0.1.4
+	* fixed setcookie bug in auth class - don't urlencode the cookie
+	* fixed parse cookie bug in auth class - don't just split by = maybe there is a = in the value
+	* set cookie domain fix because of temporary notes bug
+
+2010-05-14 Jonas Duebi <jd@cabag.ch>
+	* Version 0.1.3
+	* enabled NTLM Login over sesson setting
+	* NTLM $_SERVER['REQUEST_USER'] won't work
+	* User name is put into the $_SESSION for further logins...
+	* extended devLog calls / fixed devLog calls
+
+2010-05-07 Dimitri Koenig  <dk@cabag.ch>
+	* Version 0.1.2
+	* fixed notes:/// redirect
+
+2010-05-05 Dimitri Koenig  <dk@cabag.ch>
+	* Version 0.1.1
+	* added 'options.disableNotesTab' option for userts for disabling the notes tab for individual groups/users
+
+2010-05-04 Sonja Scholz  <ss@cabag.ch>
+	* Version 0.1.0
+	* fixed some bugs in NTLM login
+	* added function checkNTLMLogin() to check the NTLM login at a separate place
+	* added function fetchUserRecord() 
+
+2010-05-03 Sonja Scholz  <ss@cabag.ch>
+	* Version 0.0.9
+	* added functionality for NTLM login
+
+2010-04-28 Sonja Scholz  <ss@cabag.ch>
+	* Version 0.0.8
+	* changed auth class - added some devlog calls to request function
+
+2010-04-26 Dimitri Koenig  <dk@cabag.ch>
+	* Version 0.0.7
+	* finished notes:// tabs in rte
+
+2010-04-26 Sonja Scholz  <ss@cabag.ch>
+	* Version 0.0.6
+	* fixed bug in sv1 - don't search for the lotus notes password in the t3 db
+	* fixed bug in sv1 - don't save the lotus notes password while creating a new fe_user, save a random password instead
+
+2010-04-12 Dimitri König  <dk@cabag.ch>
+	* Version 0.0.5
+	* added 'notes://' meta redirect to external url sites
+
+2010-04-06 Sonja Scholz  <ss@cabag.ch>
+	* Version 0.0.4
+	* 
+
+2010-03-30 Sonja Scholz  <ss@cabag.ch>
+	* Version 0.0.3
+	* fixed several bugs in authentication service
+
+2010-03-30 Dimitri König  <dk@cabag.ch>
+	* Version 0.0.2
+	* added cag_linkchecker hook for fetching 'notes://' links
+
+2010-03-25 Sonja Scholz  <ss@cabag.ch>
+	* Version 0.0.1
+	* added tx_t3notes_auth class
+	* added ext_autoload.php for tx_t3notes_auth to don't have to add require once ot all scripts
+	* added tx_t3notes_sv1 service class for getUserFE and authUserFE
