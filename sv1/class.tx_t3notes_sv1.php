@@ -69,11 +69,19 @@ class tx_t3notes_sv1 extends tx_sv_authbase {
 		// First, check the NTLM login
 		$this->checkNTLMLogin($NTLMLoginVar);
 		
+		// check if the cookie to autologin is set
+		$this->checkCookieLogin();
+		
 		if ($this->login['status']=='login' && $this->login['uident'])	{
 			
 			// authenticate user against notes server, forard cookie to user and save cookie in session
 			if($tx_t3notes_auth->authenticate($this->login['uname'], $this->login['uident'], 1, 1, 1)) {
 				$user = $this->fetchUserRecord(str_replace(' ', '', $this->login['uname']));
+				
+				// TODO: check if it should be saved
+				if (t3lib_div::_GP('permalogin')) {
+					$this->setCookieLogin($this->login['uname'], $this->login['uident']);
+				}
 				
 				if(!is_array($user)) {
 					if($response = $this->createFeUser()) {
@@ -130,6 +138,9 @@ class tx_t3notes_sv1 extends tx_sv_authbase {
 		
 		// First, check the NTLM login
 		$this->checkNTLMLogin($NTLMLoginVar);
+		
+		// check if the cookie to autologin is set
+		$this->checkCookieLogin();
 		
 		if ($this->login['uident'] && $this->login['uname'])	{
 			// check if a user could be found in DB or Lotus Notes
@@ -188,6 +199,55 @@ class tx_t3notes_sv1 extends tx_sv_authbase {
 		} 
 		
 		return false;
+	}
+	
+	/**
+	 * Checks for a stored encrypted username and resolves it.
+	 *
+	 * @return void
+	 */
+	protected function checkCookieLogin() {
+		if (empty($this->extConf['enablePermanentCookie'])) {
+			return;
+		}
+		
+		$loginInfo = $_COOKIE['tx_t3notes_loginInfo'];
+		
+		if (!empty($loginInfo) && empty($this->login['status']) && empty($_COOKIE['tx_t3notes_loggedIn'])) {
+			$loginInfo = base64_decode($loginInfo);
+			$loginInfo = mcrypt_decrypt(MCRYPT_3DES, substr($TYPO3_CONF_VARS['SYS']['encryptionKey'], 0, 21), $loginInfo, MCRYPT_MODE_ECB);
+			$loginInfo = json_decode(trim($loginInfo), true);
+			
+			if (is_array($loginInfo) && isset($loginInfo['u']) && isset($loginInfo['p'])) {
+				if ($this->writeDevLog) t3lib_div::devLog('checkCookieLogin() - Cookie Login user found', 'tx_t3notes_sv1', -1, $user);
+				$this->login['status'] = 'login';
+				$this->login['uident'] = $loginInfo['p'];
+				$this->login['uname'] = $loginInfo['u'];
+				
+				// set a cookie so we don't re auth all the time
+				setcookie('tx_t3notes_loggedIn', 1, 0, '/', $GLOBALS['TSFE']->baseUrlWrap(''));
+			}
+		}
+	}
+	
+	/**
+	 * Store the notes username in encrypted form to a cookie with maximum lifetime.
+	 *
+	 * @param string $username The notes username.
+	 * @return void
+	 */
+	protected function setCookieLogin($username, $password) {
+		if (empty($this->extConf['enablePermanentCookie'])) {
+			return;
+		}
+		
+		$iv_size = mcrypt_get_iv_size(MCRYPT_3DES, MCRYPT_MODE_ECB);
+		$iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+		$loginInfo = array('u' => $username, 'p' => $password);
+		$loginInfo = json_encode($loginInfo);
+		$loginInfo = mcrypt_encrypt(MCRYPT_3DES, substr($TYPO3_CONF_VARS['SYS']['encryptionKey'], 0, 21), $loginInfo, MCRYPT_MODE_ECB, $iv);
+		$loginInfo = base64_encode($loginInfo);
+		setcookie('tx_t3notes_loginInfo', $loginInfo, time() + (86400 * 365 * 10), '/', $GLOBALS['TSFE']->baseUrlWrap(''));
 	}
 	
 	/**

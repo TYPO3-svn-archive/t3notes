@@ -1,3 +1,45 @@
+2011-08-25 Sonja Scholz <sonja.scholz@typo3.org>
+	* Version 0.3.0
+	* added documentation
+
+2011-08-05 Nils Blattner <nb@cabag.ch>
+	* Version 0.2.9
+	* t3notes/ext_conf_template.txt - fixed type "bool" to "boolean"
+
+2011-08-03 Nils Blattner <nb@cabag.ch>
+	* Version 0.2.8
+	* t3notes/sv1/class.tx_t3notes_sv1.php - fixed a few bugs when logging in via the cookie
+	* t3notes/sv1/class.tx_t3notes_sv1.php - added possibility to define permanent cookie login via ext conf
+	* t3notes/ext_conf_template.txt - added key for the permanent cookie login
+
+2011-08-02 Nils Blattner <nb@cabag.ch>
+	* Version 0.2.7
+	* changed t3notes/sv1/class.tx_t3notes_sv1.php - added possibility to store the notes information in a cookie and autologin with it.
+
+2011_03_31 Sonja Scholz <ss@cabag.ch>
+	* Version 0.2.6
+	* changed class.tx_t3notes_browselinkshooks.php - added condition to decide if the notes tab content should be added to prevent double content
+
+2011-03-25 Sonja Scholz <ss@cabag.ch>
+	* Version 0.2.5
+	* changed sv/sv1 php - changed encoding of NTLM key because in TYPO3 4.5.2 the post is urldecoded automatically
+
+2011-03-24 Sonja Scholz  <ss@cabag.ch>
+	* Version 0.2.4
+	* changed hooks/class.tx_t3notes_ts_links_rte_process.php - added function postProcessHref
+	* added version folder for xclasses in ext root
+	* added new xclass versions in version folder 4.5.2
+
+2010-12-08 Sonja Scholz  <ss@cabag.ch>
+	* Version 0.2.3
+	* changed auth class - write the detail informations to devlog on error in authenticate function
+	* changed auth class - changed getRequestCOOKIE() - return false if no cookie was found
+	* changed auth class - changed request() - return false if no cookie was received by other function
+	* changed auth class - don't throw an exception if the lotus notes server curl request failed, be silent
+
+2010-08-19 Sonja Scholz  <ss@cabag.ch>
+	* Version 0.2.2
+
 2010-08-19 Sonja Scholz  <ss@cabag.ch>
 	* Version 0.2.1
 	* cookie domain can be set in the extension manager now - if empty cookie domain from lotus notes will be used

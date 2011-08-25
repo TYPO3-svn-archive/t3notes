@@ -77,27 +77,31 @@ class tx_t3notes_browselinkshooks implements t3lib_browseLinksHook {
         	$javascriptMethod = 'browse_links_setHref';	
         	
     	}
-
-		$extUrl='
-	<!--
-		Enter External URL:
-	-->
-			<form action="" name="lnotesform" id="lurlform">
-				<table border="0" cellpadding="2" cellspacing="1" id="typo3-linkNOTES">
-					<tr>
-						<td>URL:</td>
-						<td><input type="text" name="lnotes" '.$this->pObj->doc->formWidth(20).' value="'.htmlspecialchars($this->pObj->curUrlInfo['act']=='t3notes_tab'?$this->pObj->curUrlInfo['info']:'notes://').'" /> '.
-							'<input type="submit" value="'.$LANG->getLL('setLink',1).'" onclick="' . $javascriptMethod . '(document.lnotesform.lnotes.value); return link_current();" /></td>
-					</tr>
-				</table>
-			</form>';
-
-		$content .= $extUrl;
-
-        if ($this->isRTE()) {
-        	$content .= $this->pObj->addAttributesForm();	
-        	
-    	}
+		
+		if($act == 't3notes_tab') {
+			$extUrl='
+		<!--
+			Enter External URL:
+		-->
+				<form action="" name="lnotesform" id="lurlform">
+					<table border="0" cellpadding="2" cellspacing="1" id="typo3-linkNOTES">
+						<tr>
+							<td>URL:</td>
+							<td><input type="text" name="lnotes" '.$this->pObj->doc->formWidth(20).' value="'.htmlspecialchars($this->pObj->curUrlInfo['act']=='t3notes_tab'?$this->pObj->curUrlInfo['info']:'notes://').'" /> '.
+								'<input type="submit" value="'.$LANG->getLL('setLink',1).'" onclick="' . $javascriptMethod . '(document.lnotesform.lnotes.value); return link_current();" /></td>
+						</tr>
+					</table>
+				</form>';
+	
+			$content .= $extUrl;
+	
+			if ($this->isRTE()) {
+				$content .= $this->pObj->addAttributesForm();	
+				
+			}
+		} else {
+			$content = '';
+		}
 
     	return $content;
     }

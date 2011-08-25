@@ -78,9 +78,7 @@ class tx_t3notes_auth implements t3lib_Singleton {
 		
 		// check the response
 		if($curlResult === false) {
-			print_r(curl_error($curlRessource));
-			print_r(curl_errno($curlRessource));
-			print_r(curl_getinfo($curlRessource));
+			if ($this->writeDevLog) 	t3lib_div::devLog('authenticate() - received no/error curl result #'.curl_errno($curlRessource).' Message:'.curl_error($curlRessource), 'tx_t3notes_auth', 3, curl_getinfo($curlRessource));
 			return false;
 		} 
 		
@@ -406,7 +404,7 @@ class tx_t3notes_auth implements t3lib_Singleton {
 			// authenticate as anonymous user
 			if(!$this->authenticate($this->extConf['anonymousUsername'],$this->extConf['anonymousPassword'],false,false,false)) {
 				if ($this->writeDevLog) 	t3lib_div::devLog('getAnonymousCookieInformation() - Default Notes User is not valid', 'tx_t3notes_auth', 3);
-				throw new Exception('Default Notes User is not valid');
+				//throw new Exception('Default Notes User is not valid');
 			}
 			
 			// save the given anonymous cookie in the DB
@@ -430,10 +428,16 @@ class tx_t3notes_auth implements t3lib_Singleton {
 			}
 		}
 		
+		if(empty($this->cookieName) || empty($this->cookieValue)) {
+			// no cookie could be found - probably the lotus notes server request for the anonymous user failed
+			if ($this->writeDevLog) 	t3lib_div::devLog('getRequestCOOKIE() - NO cookieString for request found - return false instead', 'tx_t3notes_auth', 3);
+			return false;
+		}
+		
 		//$cookieString = $this->cookieName.'='.'AAECAzRDMDc2NzY2NEMwNzZFNkVDTj1hbm9ueW0gVGVzdCBDYWIvT1U9S1NML089R1NETkVUwGg090A3vGJ0a17YbDq8c7txqMw=';
 		
 		$cookieString = $this->cookieName.'='.$this->cookieValue;
-		//echo $this->cookieValue;
+		
 		if ($this->writeDevLog) 	t3lib_div::devLog('getRequestCOOKIE() - cookieString for request', 'tx_t3notes_auth', 1, array($cookieString));
 		return $cookieString;
 	}
@@ -481,6 +485,14 @@ class tx_t3notes_auth implements t3lib_Singleton {
 			$this->extConf['curlTimeout'] = 4;
 		}
 		curl_setopt ($curlResource, CURLOPT_TIMEOUT, $this->extConf['curlTimeout']);
+		
+		// get the COOKIE for the current user
+		$cookieString = $this->getRequestCOOKIE();
+		if($cookieString === false) {
+			// no cookie could be found - probably the lotus notes server request for the anonymous user failed
+			if ($this->writeDevLog) 	t3lib_div::devLog('request() - NO cookieString for request received - return false for the whole request', 'tx_t3notes_auth', 3, curl_getinfo($curlResource));
+			return false;
+		}
 		
 		// ADD the current valid COOKIE for the current user
 		curl_setopt($curlResource, CURLOPT_COOKIE, $this->getRequestCOOKIE());

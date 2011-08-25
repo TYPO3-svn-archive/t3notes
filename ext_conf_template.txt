@@ -28,3 +28,6 @@ autoLoginWaitSeconds = 1200
 
   # cat=basic//10; type=text; label= Cookie domain: Domain which will be set for the user cookie, if empty cookie domain from notes will be used
 cookieDomain = 
+
+  # cat=basic//10; type=boolean; label= Enable direct cookie login. If this is activated, the username and password will be stored in an encrypted cookie and the user is automatically logged in again with those credentials when he comes back.
+enablePermanentCookie = 0
